@@ -22,28 +22,140 @@ import {
   Title,
   Button, Icon,
   Left, Body, Right,
-  Footer, FooterTab
+  Footer, FooterTab,
+  Form, Item, Label, Input,
+  Grid, Col,
 
  } from 'native-base';
 
 
+function AndroidHeader() {
+  if (Platform.OS === 'ios') {
+    return null;
+  }
+  return (<Header style={{height: 20}}>
+    <Text />
+  </Header>);
+}
+
+function Searchbar({title = 'Поиск'}) {
+  return (
+    <Item>
+      <Icon active name='search' />
+      <Input  placeholder={title} />
+    </Item>
+  );
+}
+
 const titles = {
-  messages: 'Сообщения',
-  users: 'Контакты',
+  messages: 'NewNext',
+  contacts: 'Контакты',
   search: 'Поиск',
+  searchUsers: 'Поиск',
   profile: 'Профиль',
 };
 const pages = {
   none: () => (
     <Text>Данный экран отсутвует =(</Text>
   ),
-  users: ({changeRoute}) => (
+  messages: ({changeRoute}) => (
+    <View>
+      {/* <Header> */}
+      <Searchbar title='Поиск чата' />
+      {/* </Header> */}
+      <List
+        dataArray={data.messages}
+        renderRow={(item) =>
+          <ListItem
+            // onPress={changeRoute('user')}
+            avatar
+          >
+            <Left>
+              <Thumbnail source={{uri: item.avatar}} />
+              {/* <Thumbnail source={require('./img.jpg')} /> */}
+            </Left>
+            <Body>
+              <Text>{item.name}</Text>
+              <Text note>{item.text}</Text>
+            </Body>
+            <Right>
+              <Text note>{item.info}</Text>
+            </Right>
+          </ListItem>
+        }
+      />
+    </View>
+  ),
+  search: ({changeRoute}) => (
+    <View>
+      <Form>
+        <Item stackedLabel>
+          <Label>Город</Label>
+          <Input  placeholder='  Любой город' />
+        </Item>
+        <Item stackedLabel>
+          <Label>Пол</Label>
+          <Input  placeholder='  Любой пол' />
+        </Item>
+        <Item stackedLabel>
+          <Label>Возраст</Label>
+          <Input  placeholder='  Любой возраст' />
+        </Item>
+        <Item stackedLabel>
+          <Label>Сфера деятельности</Label>
+          <Input  placeholder='  Дизайнер' />
+        </Item>
+        <Item stackedLabel>
+          <Label>В сети</Label>
+          <Input  placeholder='  Не важно' />
+        </Item>
+
+      </Form>
+      <Text />
+      <Grid>
+         <Col ></Col>
+         <Col >
+           <Button onPress={changeRoute('searchUsers')} large primary block><Text> Поиск </Text></Button>
+         </Col>
+         <Col ></Col>
+     </Grid>
+      {/* <Center> */}
+
+      {/* </Center> */}
+    </View>
+  ),
+  searchUsers: ({changeRoute}) => (
+    <View>
+      <Searchbar />
+
+      <List
+        dataArray={data.search}
+        renderRow={(item) =>
+          <ListItem
+            // onPress={changeRoute('user')}
+            style={{marginTop:10}}
+            avatar
+          >
+            <Left>
+              <Thumbnail source={{uri: item.avatar}} />
+            </Left>
+            <Body>
+              <Text>{item.name}</Text>
+            </Body>
+          </ListItem>
+        }
+      />
+    </View>
+
+  ),
+  contacts: ({changeRoute}) => (
     <List
-      dataArray={data.users}
+      dataArray={data.contacts}
       renderRow={(item) =>
         <ListItem
           // onPress={changeRoute('user')}
-          avatar>
+          avatar
+        >
           <Left>
             <Thumbnail source={{uri: item.avatar}} />
             {/* <Thumbnail source={require('./img.jpg')} /> */}
@@ -59,37 +171,19 @@ const pages = {
       }
     />
   ),
-  messages: ({changeRoute}) => (
-    <List
-      dataArray={data.messages}
-      renderRow={(item) =>
-        <ListItem
-          // onPress={changeRoute('user')}
-          avatar>
-          <Left>
-            <Thumbnail source={{uri: item.avatar}} />
-            {/* <Thumbnail source={require('./img.jpg')} /> */}
-          </Left>
-          <Body>
-            <Text>{item.name}</Text>
-            <Text note>{item.text}</Text>
-          </Body>
-          <Right>
-            <Text note>{item.info}</Text>
-          </Right>
-        </ListItem>
-      }
-    />
+  profile: ({changeRoute}) => (
+    <Text>profile </Text>
   )
 }
 
 class App extends React.Component {
   state = {
-    route: 'users',
+    route: 'searchUsers',
     isReady: false,
   }
 
-  changeRoute(route) {
+
+  changeRoute = (route) => {
     return  () => {
       this.setState({route});
     }
@@ -121,6 +215,7 @@ class App extends React.Component {
     return (
       <Container>
         <StatusBar barStyle="default" />
+        <AndroidHeader />
         <Header>
           <Left>
             <Button transparent>
@@ -133,21 +228,21 @@ class App extends React.Component {
           <Right />
         </Header>
         <Content>
-          {content({changeRoute})}
+          {content({changeRoute: this.changeRoute})}
         </Content>
         <Footer>
           <FooterTab>
             <Button active={route === 'messages'} onPress={this.changeRoute('messages')}>
-              <Icon active={route === 'messages'} name="pizza" />
+              <Icon active={route === 'messages'} name="chatbubbles" />
             </Button>
-            <Button active={route === 'search'} onPress={this.changeRoute('search')}>
-              <Icon active={route === 'search'} name="camera" />
+            <Button active={route.substr(0, 6) === 'search'} onPress={this.changeRoute('search')}>
+              <Icon active={route.substr(0, 6) === 'search'} name="search" />
             </Button>
-            <Button active={route === 'users'} onPress={this.changeRoute('users')}>
-              <Icon active={route === 'users'} name="navigate" />
+            <Button active={route === 'contacts'} onPress={this.changeRoute('contacts')}>
+              <Icon active={route === 'contacts'} name="person" />
             </Button>
             <Button active={route === 'profile'} onPress={this.changeRoute('profile')}>
-              <Icon active={route === 'profile'} name="person" />
+              <Icon active={route === 'profile'} name="menu" />
             </Button>
           </FooterTab>
         </Footer>

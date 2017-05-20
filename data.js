@@ -108,7 +108,60 @@ export default {
       info: _.random(1, 30) + ' апр.',
     },
   ]),
-  users: _.shuffle([
+  contacts: _.shuffle([
+    {
+      name: 'Casey Naistat',
+      online: true,
+      avatar: avatar(),
+      text: 'Санкт-Петербург, Россия, 25 лет',
+    },
+    {
+      name: 'Casey Naistat2',
+      avatar: avatar(),
+      text: 'Тольятти, Россия, 15 лет',
+    },
+    {
+      name: 'Casey Naistat3',
+      online: true,
+      avatar: avatar(),
+      text: 'Нью-Йорк, США, 45 лет',
+    },
+  ]),
+  search: _.shuffle([
+    {
+      name: 'Casey Naistat',
+      online: true,
+      avatar: avatar(),
+      text: 'Санкт-Петербург, Россия, 25 лет',
+    },
+    {
+      name: 'Casey Naistat2',
+      avatar: avatar(),
+      text: 'Тольятти, Россия, 15 лет',
+    },
+    {
+      name: 'Casey Naistat3',
+      online: true,
+      avatar: avatar(),
+      text: 'Нью-Йорк, США, 45 лет',
+    },
+    {
+      name: 'Casey Naistat',
+      online: true,
+      avatar: avatar(),
+      text: 'Санкт-Петербург, Россия, 25 лет',
+    },
+    {
+      name: 'Casey Naistat2',
+      avatar: avatar(),
+      text: 'Тольятти, Россия, 15 лет',
+    },
+    {
+      name: 'Casey Naistat3',
+      online: true,
+      avatar: avatar(),
+      text: 'Нью-Йорк, США, 45 лет',
+    },
     {
       name: 'Casey Naistat',
       online: true,
