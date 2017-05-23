@@ -10,7 +10,6 @@ const debug = () => {
 }
 
 
-
 export default StyleSheet.create({
   list: {
     flex: 1,
