@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
 import {
   List,
@@ -26,13 +27,8 @@ import {
 export default ctx => (
   class ContactsPage extends Component {
     static async action({ page, app }) {
-
-
       let users = [];
       try {
-        console.log('ctx.api', ctx.api);
-        // const res = await ctx.api.fetch('asdfdgf');
-        // const res = await ctx.api.fetch('/api/module/user/list');
         users = await app.stores.Users.getUsers();//res.data;
       } catch (err) {
         console.log({err});
@@ -50,18 +46,19 @@ export default ctx => (
       return (
         <List
           dataArray={users}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => ctx.changeRoute('/contacts')}
+            />
+          }
           renderRow={(item) =>
             <ListItem
-              onPress={() => ctx.changeRoute({
-                path: '/user',
-                query: {
-                  _id: item._id,
-                },
-              })}
+              onPress={() => ctx.changeRoute(item.getProfileRoute())}
               avatar
             >
               <Left>
-                <Avatar src={item.avatar} title={item.name} />
+                <Avatar src={item.avatar} title={item.name} online={item.online} />
               </Left>
               <Body>
                 <Text>{item.name}</Text>

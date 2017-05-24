@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  // RefreshControl,
+  RefreshControl,
 } from 'react-native';
 import {
   List,
@@ -28,15 +28,19 @@ import Avatar from '../components/Avatar';
 
 export default ctx => (
   class ChatPage extends Component {
-    static async action({ page }) {
+    static async action({ page, userId, app }) {
+
+
+      let user = {};
+      try {
+        user = await app.stores.User.getById(query._id || userId);
+      } catch (err) {
+        console.log({ err });
+      }
+
       let messages = [];
       try {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OTI0NDM5YTBlMmE2OWMzZDBjNWFhNGYiLCJ1c2VybmFtZSI6Im1lNiIsIm5hbWUiOiJJZ29yICBTdXZvcm92IiwiaWF0IjoxNDk1NTgxNjc1fQ.5Fmu13LRDIlIfFS3Y2NDrfwOv2aMZZhT2v4RFyiSwHs';
-        const res = await ctx.api.fetch(`/api/module/chat/message/User/5924439a0e2a69c3d0c5aa4f?token=${token}`, {
-          headers: {
-            token,
-          },
-        });
+        const res = await ctx.api.fetch(`/api/module/chat/message/User/` + userId);
         messages = res.data;
       } catch (err) {
         console.log({ err });
@@ -45,20 +49,14 @@ export default ctx => (
       return page
         .meta({
           path: '/messages',
-          title: 'Кейчи Ниййуцке',
-          subtitle: 'Сейчас в сети',
+          title: user.name,
+          subtitle: user.online ? 'Сейчас в сети' : 'Оффлайн',
           back: {
             route: '/messages',
           },
+          wrapContent: null,
         })
         .component(ChatPage, { messages });
-    }
-
-    state = {
-      refreshing: false,
-    }
-    _onRefresh() {
-      ctx.changeRoute('/chat')
     }
 
     render() {
@@ -66,19 +64,19 @@ export default ctx => (
       return (
         <List
           dataArray={messages}
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={this.state.refreshing}
-          //     onRefresh={this._onRefresh.bind(this)}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => ctx.changeRoute('/chat')}
+            />
+          }
           renderRow={({ user = {}, content = '', createdAt}) =>
             <ListItem
               // onPress={changeRoute('user')}
               avatar
             >
               <Left>
-                <Avatar src={user.avatar || user.profile && user.profile.avatar} title={user.name} />
+                <Avatar src={user.avatar || user.profile && user.profile.avatar} title={user.name} online={user.online} />
               </Left>
               <Body>
                 <Text>{user.name}</Text>

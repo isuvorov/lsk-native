@@ -32,15 +32,6 @@ function AndroidHeader() {
   </Header>);
 }
 
-function Searchbar({ title = 'Поиск' }) {
-  return (
-    <Item>
-      <Icon active name="search" />
-      <Input placeholder={title} />
-    </Item>
-  );
-}
-
 
 export default function Layout({ children, page }) {
   // const { app } = page;
@@ -87,22 +78,24 @@ export default function Layout({ children, page }) {
         </Right>
       </Header>
       {component}
-      <Footer>
-        <FooterTab>
-          <Button active={route === 'messages'} onPress={() => app.changeRoute('/messages')}>
-            <Icon active={route === 'messages'} name="chatbubbles" />
-          </Button>
-          <Button active={route.substr(0, 6) === 'search'} onPress={() => app.changeRoute('/search')}>
-            <Icon active={route.substr(0, 6) === 'search'} name="search" />
-          </Button>
-          <Button active={route === 'contacts'} onPress={() => app.changeRoute('/contacts')}>
-            <Icon active={route === 'contacts'} name="person" />
-          </Button>
-          <Button active={route === 'profile'} onPress={() => app.changeRoute('/profile')}>
-            <Icon active={route === 'profile'} name="menu" />
-          </Button>
-        </FooterTab>
-      </Footer>
+      {meta.disableFooter !== true && (
+        <Footer>
+          <FooterTab>
+            <Button active={route === 'messages'} onPress={() => app.changeRoute('/messages')}>
+              <Icon active={route === 'messages'} name="chatbubbles" />
+            </Button>
+            <Button active={route.substr(0, 6) === 'search'} onPress={() => app.changeRoute('/search')}>
+              <Icon active={route.substr(0, 6) === 'search'} name="search" />
+            </Button>
+            <Button active={route === 'contacts'} onPress={() => app.changeRoute('/contacts')}>
+              <Icon active={route === 'contacts'} name="person" />
+            </Button>
+            <Button active={route === 'profile'} onPress={() => app.changeRoute('/profile')}>
+              <Icon active={route === 'profile'} name="menu" />
+            </Button>
+          </FooterTab>
+        </Footer>
+      )}
     </Container>
   );
 }

@@ -68,6 +68,10 @@ export default class App extends Core {
       config: this.config,
       page: this.page,
       api: this.api,
+      userId: '5924f1c87837140011c25ab8',
+      user: {
+        _id: '5924f1c87837140011c25ab8',
+      },
     };
   }
 }

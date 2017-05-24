@@ -22,49 +22,49 @@ import {
  } from 'native-base';
 import data from '../../../data'
 import Avatar from '../components/Avatar'
+import SearchBar from '../components/SearchBar'
 
-function Searchbar({ title = 'Поиск' }) {
-  return (
-    <Item>
-      <Icon active name="search" />
-      <Input placeholder={title} />
-    </Item>
-  );
-}
 export default ctx => (
   class SearchUsersPage extends Component {
-    static async action({ page }) {
+    static async action({ page, app }) {
+      let users = [];
+      try {
+        users = await app.stores.Users.getUsers();//res.data;
+      } catch (err) {
+        console.log({err});
+      }
       return page
         .meta({
           path: '/search',
           title: 'Поиск',
-          subtitle: '2,034 человек',
+          subtitle: users.length + ' человек',
           back: {
             route: '/search',
             icon: <Icon name="settings" />,
           },
         })
-        .component(SearchUsersPage, { });
+        .component(SearchUsersPage, { users });
     }
 
     render() {
+      const { users } = this.props;
       return (
         <View>
-          <Searchbar />
-
+          <SearchBar />
           <List
-            dataArray={data.search}
+            dataArray={users}
             renderRow={item =>
               <ListItem
-                // onPress={changeRoute('user')}
+                onPress={() => ctx.changeRoute(item.getProfileRoute())}
                 style={{ marginTop: 10 }}
                 avatar
               >
                 <Left>
-                  <Avatar src={item.avatar} title={item.name} />
+                  <Avatar src={item.avatar} title={item.name} online={item.online} />
                 </Left>
                 <Body>
                   <Text>{item.name}</Text>
+                  <Text style={{fontSize: 12, color: '#ccc'}}>{[item.profile.city, item.profile.country, item.profile.age].filter(a => a).join(', ')}</Text>
                 </Body>
               </ListItem>
             }

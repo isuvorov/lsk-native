@@ -46,6 +46,17 @@ export default ctx => class UserModel {
   @computed get profileLink() {
     return `/user/${this._id}`;
   }
+
+  getProfileRoute() {
+    return {
+      path: '/user',
+      query: {
+        _id: this._id,
+      },
+    };
+  }
+
+
 // }
 //
 //

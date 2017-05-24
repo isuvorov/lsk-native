@@ -1,55 +1,181 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
-import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import {
+  Image,
+  View,
+  Text,
+  Platform,
+} from 'react-native';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
-
-
+import {
+  Form,
+  Item,
+  Input,
+  Label,
+  Content,
+  Button,
+  Grid,
+  Col,
+  Icon,
+} from 'native-base';
+function MyInput(props) {
+  let prefix = '';
+  if (Platform.OS === 'android') {
+    prefix = '  ';
+  }
+  return <Input {...props} value={prefix + (props.value || '').toString()}/>
+}
 export default ctx => (
   class UserPage extends Component {
-    static async action({ page, query = {} }) {
+    static async action({ page, userId, app, query = {} }) {
       let user = {};
 
       try {
-        const res = await ctx.api.fetch('/api/module/user/get', {
-          method: 'POST',
-          body: {
-            _id: query._id,
-          },
-        })
-        user = res.data;
+        user = await app.stores.User.getById(query._id || userId);
       } catch (err) {
-        console.log({err});
+        console.log({ err });
       }
 
       return page
         .meta({
-          path: '/search',
+          path: '/contacts',
           title: user.name,
-          subtitle: 'Сейчас в сети',
+          subtitle: user.online ? 'Сейчас в сети' : 'Оффлайн',
           back: {
-            route: '/search',
+            route: '/contacts',
           },
-          wrapContent: null,
+          // wrapContent: null,
         })
         // .layout()
-        .component(UserPage, { });
+        .component(UserPage, { user });
     }
 
     render() {
-      const uri = 'https://cs541600.userapi.com/c836638/v836638029/a536/9ugPZhhty2E.jpg';
+      const { user } = this.props;
       return (
+        <View>
+          <Image style={{ height: 250 }} source={{ uri: user.avatar }} />
+          <Form>
+            <Item stackedLabel>
+              <Label>Имя</Label>
+              <MyInput value={user.name} disabled />
+            </Item>
+            <Grid>
+              <Col>
+                <Item stackedLabel>
+                  <Label>Пол</Label>
+                  <MyInput value={user.profile.gender || 'Мужской'} disabled />
+                </Item>
+              </Col>
+              <Col>
+                <Item stackedLabel>
+                  <Label>Пол</Label>
+                  <MyInput value={`${user.profile.age || '18'} лет`} disabled />
+                </Item>
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                <Item stackedLabel>
+                  <Label>Страна</Label>
+                  <MyInput value={user.profile.country || 'Россия'} disabled />
+                </Item>
+              </Col>
+              <Col>
+                <Item stackedLabel>
+                  <Label>Город</Label>
+                  <MyInput value={user.profile.city || 'Коломна'} disabled />
+                </Item>
+              </Col>
+            </Grid>
+            <Item stackedLabel>
+              <Label>Сфера деятельности</Label>
+              <MyInput placeholder="Фотограф" />
+            </Item>
+          </Form>
+          <Grid>
+            <Col>
+              <Button transparent full vertical>
+                <Icon name="person" />
+                <Text>Navigate</Text>
+              </Button>
+            </Col>
+            <Col>
+              <Button transparent full vertical>
+                <Icon name="chatbubbles" />
+                <Text>Contact</Text>
+              </Button>
+            </Col>
+          </Grid>
+        </View>
+      );
+    }
+    render2() {
+      const { user } = this.props;
+      return (
+
         <ParallaxScrollView
           backgroundColor="white"
           // backgroundSpeed={100}
           contentBackgroundColor="white"
           parallaxHeaderHeight={250}
           renderBackground={() => (
-            <Image style={{ height: 250 }} source={{ uri }} />
+            <Image style={{ height: 250 }} source={{ uri: user.avatar }} />
           )}
         >
-          <View style={{ height: 500 }}>
-            <Text>Scroll me</Text>
-          </View>
+          <Content>
+            <Form>
+              <Item stackedLabel>
+                <Label>Имя</Label>
+                <MyInput value={user.name} disabled />
+              </Item>
+              <Grid>
+                <Col>
+                  <Item stackedLabel>
+                    <Label>Пол</Label>
+                    <MyInput value={user.profile.gender || 'Мужской'} disabled />
+                  </Item>
+                </Col>
+                <Col>
+                  <Item stackedLabel>
+                    <Label>Пол</Label>
+                    <MyInput value={`${user.profile.age || '18'} лет`} disabled />
+                  </Item>
+                </Col>
+              </Grid>
+              <Grid>
+                <Col>
+                  <Item stackedLabel>
+                    <Label>Страна</Label>
+                    <MyInput value={user.profile.country || 'Россия'} disabled />
+                  </Item>
+                </Col>
+                <Col>
+                  <Item stackedLabel>
+                    <Label>Город</Label>
+                    <MyInput value={user.profile.city || 'Коломна'} disabled />
+                  </Item>
+                </Col>
+              </Grid>
+              <Item stackedLabel>
+                <Label>Сфера деятельности</Label>
+                <MyInput placeholder="Фотограф" />
+              </Item>
+            </Form>
+            {/* <Grid>
+              <Col>
+                <Button active vertical>
+                  <Icon name="person" />
+                  <Text>Navigate</Text>
+                </Button>
+              </Col>
+              <Col>
+                <Button vertical>
+                  <Icon name="chatbubbles" />
+                  <Text>Contact</Text>
+                </Button>
+              </Col>
+            </Grid> */}
+          </Content>
         </ParallaxScrollView>
       );
     }

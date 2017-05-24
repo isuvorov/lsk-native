@@ -1,44 +1,23 @@
-import React, { Component } from 'react';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {
-  List,
-  ListItem,
-  Thumbnail,
-  Container,
-  Content,
-  Header,
-  Title,
-  Button, Icon,
-  Left, Body, Right,
-  Footer, FooterTab,
-  Form, Item, Label, Input,
-  Grid, Col,
- } from 'native-base';
-
 import Layout from './Layout';
 export default ctx => ([
   {
     path: '/',
     action({ next, page }) {
       return page
-      // .meta({
-      //   title: 'Админ Панель',
-      //   url: '/admin',
-      // })
       .layout(Layout)
       .next(next);
     },
     children: [
       {
         path: '/',
-        action: ctx.pages.chat.action,
+        action: ctx.pages.auth.action,
+        // action: ctx.pages.chat.action,
         // action: ctx.pages.user.action,
+        // action: ctx.pages.messages.action,
+      },
+      {
+        path: '/auth',
+        action: ctx.pages.auth.action,
         // action: ctx.pages.messages.action,
       },
       {

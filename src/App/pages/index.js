@@ -6,6 +6,7 @@ export default function () {
     profile: require('./profile').default(...arguments),
     search: require('./search').default(...arguments),
     user: require('./user').default(...arguments),
+    auth: require('./auth').default(...arguments),
     searchUsers: require('./searchUsers').default(...arguments),
   };
 }

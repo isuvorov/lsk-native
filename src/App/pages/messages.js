@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Platform,
-  StatusBar,
-  StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
 import {
   List,
@@ -22,49 +20,59 @@ import {
  } from 'native-base';
 import data from '../../../data'
 import Avatar from '../components/Avatar'
+import SearchBar from '../components/SearchBar'
+import _ from 'lodash'
 
-function Searchbar({ title = 'Поиск' }) {
-  return (
-    <Item>
-      <Icon active name="search" />
-      <Input placeholder={title} />
-    </Item>
-  );
+function cropText(text = '', size = 70) {
+  return text.length > size ? (text.substr(0, size) + '...') : text;
 }
+// {cropText(text)}
+
 
 export default ctx => (
   class MessagePage extends Component {
-    static async action({ page }) {
+    static async action({ page, app }) {
+      let users = [];
+      try {
+        users = await app.stores.Users.getUsers();//res.data;
+      } catch (err) {
+        console.log({err});
+      }
       return page
         .meta({
           path: '/messages',
           title: 'NewNext',
         })
-        .component(MessagePage, { });
+        .component(MessagePage, { users });
     }
 
     render() {
+      const { users } = this.props;
       return (
         <View>
-          {/* <Header> */}
-          <Searchbar title="Поиск чата" />
-          {/* </Header> */}
+          <SearchBar title="Поиск чата" />
           <List
-            dataArray={data.messages}
+            dataArray={users}
+            refreshControl={
+              <RefreshControl
+                refreshing={false}
+                onRefresh={() => ctx.changeRoute('/messages')}
+              />
+            }
             renderRow={item =>
               <ListItem
                 onPress={() => ctx.changeRoute('/chat')}
                 avatar
               >
                 <Left>
-                  <Avatar src={item.avatar} title={item.name} />
+                  <Avatar src={item.avatar} title={item.name} online={item.online} />
                 </Left>
                 <Body>
                   <Text>{item.name}</Text>
-                  <Text note>{item.text}</Text>
+                  <Text note>{cropText(_.shuffle(data.messages.map(m => m.text))[0])}</Text>
                 </Body>
                 <Right>
-                  <Text note>{item.info}</Text>
+                  <Text note>{_.shuffle(data.messages.map(m => m.info))[0]}</Text>
                 </Right>
               </ListItem>
             }
