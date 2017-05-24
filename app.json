@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "16.0.0"
-  }
+     "name": "Lsk Native",
+     "icon": "./path/to/your/app-icon.png",
+     "version": "1.0.0",
+     "slug": "lsk-native",
+     "sdkVersion": "16.0.0",
+     "ios": {
+       "bundleIdentifier": "ru.isuvorov.lsknative"
+     },
+     "android": {
+       "package": "ru.isuvorov.lsknative"
+     }
+   }
 }
