@@ -3,7 +3,9 @@
 export default {
   url: 'https://lsk.mgbeta.ru',
   api: {
-    url: 'https://lsk.mgbeta.ru',
+    url: 'http://x.mgbeta.ru:8080',
+    // url: 'https://lsk.mgbeta.ru',
+    // base: '/api/v1',
     base: '/api/v1',
   },
   log: {

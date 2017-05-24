@@ -20,11 +20,30 @@ import {
   Form, Item, Label, Input,
   Grid, Col,
  } from 'native-base';
+import data from '../../../data'
+import Avatar from '../components/Avatar'
 
+function Searchbar({ title = 'Поиск' }) {
+  return (
+    <Item>
+      <Icon active name="search" />
+      <Input placeholder={title} />
+    </Item>
+  );
+}
 export default ctx => (
   class SearchUsersPage extends Component {
     static async action({ page }) {
       return page
+        .meta({
+          path: '/search',
+          title: 'Поиск',
+          subtitle: '2,034 человек',
+          back: {
+            route: '/search',
+            icon: <Icon name="settings" />,
+          },
+        })
         .component(SearchUsersPage, { });
     }
 
@@ -42,7 +61,7 @@ export default ctx => (
                 avatar
               >
                 <Left>
-                  <Thumbnail source={{ uri: item.avatar }} />
+                  <Avatar src={item.avatar} title={item.name} />
                 </Left>
                 <Body>
                   <Text>{item.name}</Text>

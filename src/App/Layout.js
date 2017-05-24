@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Switch,
 } from 'react-native';
 import {
   List,
@@ -44,26 +45,48 @@ function Searchbar({ title = 'Поиск' }) {
 export default function Layout({ children, page }) {
   // const { app } = page;
   const app = page.props.app;
+  const { meta = {} } = page.state;
+  let component = children;
+  if (meta.wrapContent !== null) {
+    component = (
+      <Content>
+        {component}
+      </Content>
+    );
+  }
+  console.log({ pageState: page.state });
   // console.log({ page});
-  const route = 'messages';
+  const route = (meta.path || '/').substr(1);
+  const back = meta.back;
   return (
     <Container>
       <StatusBar barStyle="default" />
       <AndroidHeader />
       <Header>
         <Left>
-          <Button transparent>
-            {/* <Icon name='menu' /> */}
-          </Button>
+          {back && (
+            <Button transparent onPress={() => app.changeRoute(back.route)}>
+              {back.icon ? back.icon : <Icon name="arrow-back" />}
+            </Button>
+          )}
         </Left>
         <Body>
-          {/* <Title>{titles[route]}</Title> */}
+          <Title>{meta.title || '???'}</Title>
+          {meta.subtitle && (
+            <Title style={{ fontSize: 10 }}>
+              {meta.subtitle}
+            </Title>
+          )}
         </Body>
-        <Right />
+        <Right>
+
+          <Switch
+            style={{ marginBottom: 10 }}
+            value
+          />
+        </Right>
       </Header>
-      <Content>
-        {children}
-      </Content>
+      {component}
       <Footer>
         <FooterTab>
           <Button active={route === 'messages'} onPress={() => app.changeRoute('/messages')}>

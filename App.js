@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Expo from 'expo';
 import App from './src/App';
+import config from './src/config';
 global.__CLIENT__ = true;
 
 export default class Init extends Component {
@@ -15,6 +16,7 @@ export default class Init extends Component {
   constructor() {
     super();
     this.app = new App({
+      config,
       wrapperApp: this,
     });
   }

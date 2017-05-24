@@ -22,7 +22,7 @@ import {
  } from 'native-base';
 
 import Layout from './Layout';
-export default [
+export default ctx => ([
   {
     path: '/',
     action({ next, page }) {
@@ -37,124 +37,39 @@ export default [
     children: [
       {
         path: '/',
-        action: ({ app, page }) => (
-          page.component(
-            <Text>
-              Home
-            </Text>,
-          )
-        ),
+        action: ctx.pages.chat.action,
+        // action: ctx.pages.user.action,
+        // action: ctx.pages.messages.action,
+      },
+      {
+        path: '/user',
+        action: ctx.pages.user.action,
+        // action: ctx.pages.messages.action,
       },
       {
         path: '/messages',
-        action: ({ page }) => (
-          page.component(
-            <Text>
-              messages
-            </Text>,
-          )
-        ),
+        action: ctx.pages.messages.action,
+      },
+      {
+        path: '/chat',
+        action: ctx.pages.chat.action,
       },
       {
         path: '/search',
-        action: ({ page }) => (
-          page.component(
-            <Text>
-              search
-            </Text>,
-          )
-        ),
+        action: ctx.pages.search.action,
+      },
+      {
+        path: '/searchUsers',
+        action: ctx.pages.searchUsers.action,
       },
       {
         path: '/contacts',
-        action: ({ app }) => (
-          <Text>
-            contacts
-          </Text>
-        ),
+        action: ctx.pages.contacts.action,
       },
       {
         path: '/profile',
-        action: ({ app }) => (
-          <Text>
-            profile
-          </Text>
-        ),
-      },
-      {
-        path: '/contacts',
-        async action({ page, app }) {
-          // console.log(11111);
-          // console.log({page}, page.meta);
-          const res = await app.api.fetch(url);
-          // console.log(22222);
-
-          // return <Text>qwe</Text>
-
-          // console.log({res});
-          // const users = new uapp.stores.Users();
-          // await users.fetchUsers(20);
-          // console.log('page', {page});
-          const users = res.data;
-          // console.log(res.data);
-          return page
-            .meta({
-              title: 'Список пользователей',
-              description: 'Все пользователи',
-              url: '/cabinet/users',
-            })
-            .component(
-              <List
-                dataArray={users}
-                renderRow={item =>
-                  <ListItem
-                    // onPress={changeRoute('user')}
-                    avatar
-                  >
-                    <Left>
-                      <Thumbnail source={{ uri: item.avatar || item.profile && item.profile.avatar }} />
-                      {/* <Thumbnail source={require('./img.jpg')} /> */}
-                    </Left>
-                    <Body>
-                      <Text>{item.name}</Text>
-                      <Text note>{item.text}</Text>
-                    </Body>
-                    <Right>
-                      <Text note>{item.info}</Text>
-                    </Right>
-                  </ListItem>
-                }
-              />,
-            );
-            // .component(Users, { users });
-        },
-      },
-      {
-        path: '/contacts2',
-        action: async ({ page }) => (
-          <List
-            dataArray={data.contacts}
-            renderRow={item =>
-              <ListItem
-                // onPress={changeRoute('user')}
-                avatar
-              >
-                <Left>
-                  <Thumbnail source={{ uri: item.avatar }} />
-                  {/* <Thumbnail source={require('./img.jpg')} /> */}
-                </Left>
-                <Body>
-                  <Text>{item.name}</Text>
-                  <Text note>{item.text}</Text>
-                </Body>
-                <Right>
-                  <Text note>{item.info}</Text>
-                </Right>
-              </ListItem>
-            }
-          />
-        ),
+        action: ctx.pages.profile.action,
       },
     ],
   },
-];
+]);

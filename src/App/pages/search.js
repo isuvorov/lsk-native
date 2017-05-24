@@ -26,6 +26,10 @@ export default ctx => (
   class SearchPage extends Component {
     static async action({ page }) {
       return page
+        .meta({
+          path: '/search',
+          title: 'Поиск',
+        })
         .component(SearchPage, { });
     }
 
@@ -59,7 +63,7 @@ export default ctx => (
           <Grid>
             <Col />
             <Col >
-              <Button onPress={changeRoute('searchUsers')} large primary block><Text> Поиск </Text></Button>
+              <Button onPress={() => ctx.changeRoute('/searchUsers')} large primary block><Text> Поиск </Text></Button>
             </Col>
             <Col />
           </Grid>

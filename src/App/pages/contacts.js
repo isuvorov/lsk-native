@@ -20,26 +20,48 @@ import {
   Form, Item, Label, Input,
   Grid, Col,
  } from 'native-base';
+ import data from '../../../data'
+ import Avatar from '../components/Avatar'
 
 export default ctx => (
   class ContactsPage extends Component {
-    static async action({ page }) {
+    static async action({ page, app }) {
+
+
+      let users = [];
+      try {
+        console.log('ctx.api', ctx.api);
+        // const res = await ctx.api.fetch('asdfdgf');
+        // const res = await ctx.api.fetch('/api/module/user/list');
+        users = await app.stores.Users.getUsers();//res.data;
+      } catch (err) {
+        console.log({err});
+      }
       return page
-        .component(ContactsPage, { });
+        .meta({
+          path: '/contacts',
+          title: 'Контакты',
+        })
+        .component(ContactsPage, { users });
     }
 
     render() {
+      const { users } = this.props
       return (
         <List
-          dataArray={data.contacts}
+          dataArray={users}
           renderRow={(item) =>
             <ListItem
-              // onPress={changeRoute('user')}
+              onPress={() => ctx.changeRoute({
+                path: '/user',
+                query: {
+                  _id: item._id,
+                },
+              })}
               avatar
             >
               <Left>
-                <Thumbnail source={{uri: item.avatar}} />
-                {/* <Thumbnail source={require('./img.jpg')} /> */}
+                <Avatar src={item.avatar} title={item.name} />
               </Left>
               <Body>
                 <Text>{item.name}</Text>

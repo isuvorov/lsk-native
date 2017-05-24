@@ -11,6 +11,8 @@ export default class App extends Core {
   async init() {
     await super.init();
     this.api = new this.Api(this.config && this.config.api || {});
+    this.pages = require('./pages').default(this);
+    this.stores = require('./stores').default(this);
     this.router = new UniversalRouter(this.getRoutes(), {});
     this.log.trace('router', this.router);
   }
@@ -33,7 +35,7 @@ export default class App extends Core {
   }
 
   getRoutes() {
-    return require('./routes').default;
+    return require('./routes').default(this);
   }
 
   resetPage() {

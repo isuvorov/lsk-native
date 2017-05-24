@@ -25,6 +25,10 @@ export default ctx => (
   class ProfilePage extends Component {
     static async action({ page }) {
       return page
+        .meta({
+          path: '/profile',
+          title: 'Профиль',
+        })
         .component(ProfilePage, { });
     }
 

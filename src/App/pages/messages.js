@@ -20,12 +20,26 @@ import {
   Form, Item, Label, Input,
   Grid, Col,
  } from 'native-base';
+import data from '../../../data'
+import Avatar from '../components/Avatar'
 
+function Searchbar({ title = 'Поиск' }) {
+  return (
+    <Item>
+      <Icon active name="search" />
+      <Input placeholder={title} />
+    </Item>
+  );
+}
 
 export default ctx => (
   class MessagePage extends Component {
     static async action({ page }) {
       return page
+        .meta({
+          path: '/messages',
+          title: 'NewNext',
+        })
         .component(MessagePage, { });
     }
 
@@ -36,15 +50,14 @@ export default ctx => (
           <Searchbar title="Поиск чата" />
           {/* </Header> */}
           <List
-            dataArray={messages}
+            dataArray={data.messages}
             renderRow={item =>
               <ListItem
-                // onPress={changeRoute('user')}
+                onPress={() => ctx.changeRoute('/chat')}
                 avatar
               >
                 <Left>
-                  <Thumbnail source={{ uri: item.avatar }} />
-                  {/* <Thumbnail source={require('./img.jpg')} /> */}
+                  <Avatar src={item.avatar} title={item.name} />
                 </Left>
                 <Body>
                   <Text>{item.name}</Text>
