@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Platform,
   StatusBar,
@@ -19,17 +20,24 @@ import {
   Left, Body, Right,
   Footer, FooterTab,
   Form, Item, Label, Input,
-  Grid, Col,
+  Grid, Col, StyleProvider,
  } from 'native-base';
 
+import getTheme from '../theme/components';
+// import platform from '../theme/variables/commonColor';
+import platform from '../theme/variables/platform';
 
 function AndroidHeader() {
   if (Platform.OS === 'ios') {
     return null;
   }
-  return (<Header style={{ height: 20 }}>
+  return (
+  <StyleProvider style={getTheme(platform)}>
+  <Header style={{ height: 20 }}>
     <Text />
-  </Header>);
+  </Header>
+  </StyleProvider>
+  );
 }
 
 
@@ -40,9 +48,11 @@ export default function Layout({ children, page }) {
   let component = children;
   if (meta.wrapContent !== null) {
     component = (
-      <Content>
+      <StyleProvider style={getTheme(platform)}>
+      <Content style={{paddingRight: 10,}}>
         {component}
       </Content>
+      </StyleProvider>
     );
   }
   console.log({ pageState: page.state });
@@ -53,6 +63,7 @@ export default function Layout({ children, page }) {
     <Container>
       <StatusBar barStyle="default" />
       <AndroidHeader />
+      <StyleProvider style={getTheme(platform)}>
       <Header>
         <Left>
           {back && (
@@ -61,24 +72,28 @@ export default function Layout({ children, page }) {
             </Button>
           )}
         </Left>
-        <Body>
-          <Title>{meta.title || '???'}</Title>
+        <Body style={{flex: 3 }}>
+
+          <Title style={{fontSize: 15, fontWeight: 'bold', }}>{meta.title || '???'}</Title>
           {meta.subtitle && (
-            <Title style={{ fontSize: 10 }}>
+            <Title style={{ fontSize: 10, }}>
               {meta.subtitle}
             </Title>
           )}
         </Body>
         <Right>
 
-          <Switch
-            style={{ marginBottom: 10 }}
+          <Switch onTintColor='#90EB76' thumbTintColor="#fff" tintColor="#ccc"
+            style={{ marginBottom: 0 }}
             value
           />
         </Right>
       </Header>
+      </StyleProvider>
+
       {component}
       {meta.disableFooter !== true && (
+        <StyleProvider style={getTheme(platform)}>
         <Footer>
           <FooterTab>
             <Button active={route === 'messages'} onPress={() => app.changeRoute('/messages')}>
@@ -95,6 +110,7 @@ export default function Layout({ children, page }) {
             </Button>
           </FooterTab>
         </Footer>
+        </StyleProvider>
       )}
     </Container>
   );

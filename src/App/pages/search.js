@@ -63,7 +63,7 @@ export default ctx => (
           <Grid>
             <Col />
             <Col >
-              <Button onPress={() => ctx.changeRoute('/searchUsers')} large primary block><Text> Поиск </Text></Button>
+              <Button  onPress={() => ctx.changeRoute('/searchUsers')} block><Text style={{color: '#fff', fontWeight: 'bold',}}> {'Поиск'.toUpperCase()} </Text></Button>
             </Col>
             <Col />
           </Grid>

@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Platform,
+  Dimensions,
 } from 'react-native';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import {
@@ -15,8 +16,10 @@ import {
   Button,
   Grid,
   Col,
+  Row,
   Icon,
-} from 'native-base';
+  } from 'native-base';
+
 function MyInput(props) {
   let prefix = '';
   if (Platform.OS === 'android') {
@@ -36,11 +39,25 @@ export default ctx => (
         })
         .component(AuthPage, { });
     }
+getHeight(multiplier) {
+    return {
+        height: Dimensions.get('window').height*multiplier,
+    }
+}
+getWidth(multiplier) {
+    return {
+        width: Dimensions.get('window').width*multiplier, 
+    }
+}
 
     render() {
       return (
         <View>
           {/* <Image style={{ height: 250 }} source={{ uri: user.avatar }} /> */}
+<Grid style={{alignItems: 'center'}}>
+    <Row style={[this.getHeight(0.2)]}></Row>
+    <Row><Text>Добро пожаловать в <Text style={{color: '#C90DD3', fontWeight: 'bold', }}>NewNext!</Text></Text></Row>
+    <Col style={[this.getWidth(0.98)]}>
           <Form>
             <Item stackedLabel>
               <Label>Email</Label>
@@ -51,25 +68,21 @@ export default ctx => (
               <MyInput defaultValue={'testtest'} secureTextEntry />
             </Item>
           </Form>
-
-          <Text />
-          <Grid>
-            <Col />
-            <Col>
-              <Button onPress={() => ctx.changeRoute('/messages')}>
-                <Text>Войти</Text>
+    </Col>
+    <Row style={{paddingTop:10,}}>
+              <Button bordered onPress={() => ctx.changeRoute('/messages')}>
+                <Text style={{color: '#C90DD3', fontWeight: 'bold'}}>{'Войти'.toUpperCase()}</Text>
               </Button>
-            </Col>
-            <Col />
-          </Grid>
+    </Row>
+    <Row style={{paddingTop:10}}>
+                <Button block onPress={() => ctx.changeRoute('/messages')}>
+                <Text style={{color: 'white', fontWeight: 'bold', }}>Нет аккаунта? Присоединяйтесь</Text>
+              </Button>
 
-          {/* <Text style={{color: '#ff2ef0', borderBottomSize: 1, borderBottomStyle: 'dotted', borderBottomColor: '#ff2ef0'}}>
-            Рассказать друзьям о приложении
-          </Text>
-          <Text style={{color: '#ff2ef0', borderBottomSize: 1, borderBottomStyle: 'dotted', borderBottomColor: '#ff2ef0'}}>
-            О приложении
-          </Text> */}
+    </Row>
+</Grid>
         </View>
+        
       );
     }
   }
